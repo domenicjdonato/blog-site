@@ -16,6 +16,6 @@ In this article, we go over how to find:
 This is called a Quadratic Approximation "deep dive" because we're going to go 
 through steps in as much detail as possible: Taylor Expansion, 
 the Covariance Matrix $\Sigma$, it's inverse $\Sigma^{-1}$, and it's relationship
-to the Hessian \$mathcal{H}$.  
+to the Hessian $\mathcal{H}$.  
 
 (aka Laplace Approximation) to
