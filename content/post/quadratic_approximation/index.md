@@ -1,11 +1,8 @@
 ---
-summary: "TODO: Make a summary."
+title: Quadratic Approximation of the Posterior -- Deep Dive
+date: 2020-12-04
 math: true
-draft: true
-active: true
 ---
-
-# Quadratic Approximation of the Posterior -- Deep Dive
 
 In this article, we go over how to find:
 * the maximum a posteriori (MAP) of a Gaussian model with priors
