@@ -16,10 +16,7 @@ organizations:
 # Short bio (displayed in user profile at end of posts)
 bio: My research interests are deep learning, probabilistic modeling, and artificial intelligence in general.
 
-interests:
-- Artificial Intelligence
-- Deep Learning
-- Probabilistic Modeling
+
 
 # education:
 #   courses:
@@ -44,12 +41,12 @@ social:
 # - icon: twitter
 #   icon_pack: fab
 #   link: https://twitter.com/GeorgeCushen
-- icon: google-scholar
-  icon_pack: ai
-  link: https://scholar.google.co.uk/citations?hl=en&user=VQipQCgAAAAJ
 - icon: linkedin
   icon_pack: fab
   link: https://www.linkedin.com/in/domenicdonato/
+- icon: google-scholar
+  icon_pack: ai
+  link: https://scholar.google.co.uk/citations?hl=en&user=VQipQCgAAAAJ
 # Link to a PDF of your resume/CV from the About widget.
 # To enable, copy your resume/CV to `static/files/cv.pdf` and uncomment the lines below.
 # - icon: cv
@@ -69,4 +66,4 @@ user_groups:
 - Visitors
 ---
 
-TODO.
+My research interests are deep learning, probabilistic modeling, and artificial intelligence in general.
