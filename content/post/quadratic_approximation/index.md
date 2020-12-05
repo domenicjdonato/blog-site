@@ -24,7 +24,13 @@ Topics covered:
 
 ## Preamble
 
-Richard McElreath does a great job of explaining the topics of Probabilistic Modeling and Bayesian Inference. This post is based on the problem he uses in Chapter 4 of Statistical Rethinking. In particular, this post is about what happens when a single line of code is called `result = map(model, data=df)`. It turns out there is a lot happening behind the scene here and we're going to cover it.
+Richard McElreath does a great job of explaining the topics of Probabilistic Modeling and Bayesian Inference. This post is based on the problem he uses in Chapter 4 of Statistical Rethinking. In particular, this post is about what happens when a single line of code is called 
+
+```python
+result = maximum_a_posteriori(model, data=df)
+``` 
+
+It turns out there is a lot happening behind the scene here and we're going to cover it.
 
 ## Problem setup
 
@@ -48,7 +54,7 @@ h_i &\sim N(\mu, \sigma) \\\\
 \end{aligned}
 $$
 
-From the data and what we know about the world, a mean height prior of `178 cm` is a bit high. However, the flexibility provided by the standard deviation of `20 cm` means that the model can still fit our data. It's also useful for illustrating how data can overcome incorrect priors so long as they are not too strong. We double check that our model is capable of describing the data by plotting samples from it's prior distribution. 
+From the data and what we know about the world, a mean height prior of `178` is a bit high. However, the flexibility provided by the standard deviation of `20` means that the model can still fit our data. It's also useful for illustrating how data can overcome incorrect priors so long as they are not too strong. We double check that our model is capable of describing the data by plotting samples from it's prior distribution. 
 
 !['Histogram of height data and model prior.'](images/data_prior_hist.png)
 
