@@ -8,7 +8,7 @@ date: 2020-12-04
 
 ---
 
-I'm calling this a "deep dive" because we're going to go through many steps as we solve this problem. Many of these steps are intermediary and usually glossed over or stated as fact in other descriptions of this topic. This post is most suited to those who are doing interview preparation or who want a detailed understand of the topic.
+I'm calling this a "deep dive" because we're going to go through many steps as we solve this problem. Many of these steps are intermediary and usually glossed over or stated as fact in other explanations of this topic. This post is most suited to those who are doing interview preparation or who want a detailed understand of the topic.
 
 Topics covered:
 * Multivariate Gaussian Distribution $N(\mu, \Sigma)$
@@ -42,8 +42,8 @@ The first model that Richard has us use is a Gaussian with priors on both of it'
 
 $$
 \begin{aligned}
-h_i &\sim N(\mu, \sigma) \\
-\mu &\sim N(178, 20) \\
+h_i &\sim N(\mu, \sigma) \\\\
+\mu &\sim N(178, 20) \\\\
 \sigma &\sim U(0, 50)
 \end{aligned}
 $$
