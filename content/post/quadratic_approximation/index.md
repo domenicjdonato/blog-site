@@ -22,6 +22,8 @@ Topics covered:
 
 [Companion Colab Notebook](https://colab.research.google.com/drive/1REwGPMOk_elQcalsqhKzqQ3WYizB_T37?usp=sharing)
 
+{{% toc %}}
+
 ## Preamble
 
 Richard McElreath does a great job of explaining the topics of Probabilistic Modeling and Bayesian Inference. This post is based on the problem he uses in Chapter 4 of Statistical Rethinking. In particular, this post is about what happens when a single line of code is called 
@@ -60,4 +62,29 @@ From the data and what we know about the world, a mean height prior of `178` is 
 
 ## Find MAP estimate of parameters
 
+TODO
 
+{{% callout note %}}
+The mode of a distribution is its *maximum a posteriori* which translates to *maximum of the posterior*.
+{{% /callout %}}
+
+
+## Quadratic approximation of parameter distributions
+
+Now that we have found the mode of the posterior distribution, we can use quadratic approximation to estimate the marginal distribution of our models parameters. 
+
+Let's go over what we have so far. The posterior of our model is a Gaussian model of height, $h \sim N(\mu, \sigma)$. Using gradient decent, we've found that using values $\mu = 154.60$ and $\sigma = 7.73$ maximizes the probability of the data subject to our priors. This gives us a point estimate of our parameters $\theta = \{\mu, \sigma \}$. Now let's find each parameters marginal distribution.
+
+### Parameter distributions
+
+Before calculating the marginal distributions, let's take a look at the joint distribution of $\theta$.
+
+!['Histogram of adult height data.'](images/posterior_distribution_72.png)
+
+!['Histogram of adult height data.'](images/posterior_distribution_300.png)
+
+
+!['Histogram of adult height data.'](images/posterior_distribution_400.png)
+
+
+!['Histogram of adult height data.'](images/posterior_distribution_600.png)
