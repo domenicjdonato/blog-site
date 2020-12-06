@@ -80,7 +80,7 @@ $$
 \end{aligned}
 $$
 
-and in our case $\mathbf{\theta} \coloneqq \{\mu, \sigma\}$ since these are the two, $d = 2$, parameters of our height model. Using gradient decent, we've found that $\hat{\mu} = 154.60$ and $\hat{\sigma} = 7.73$ which means that $\hat{\mathbf{\theta}} = \{154.60, 7.73\}$. What's still unknown to us is the variance of the posterior, $\Sigma$. Let's figure this out now.
+and in our case $\mathbf{\theta} := \\{\mu, \sigma\\}$ since these are the two, $d = 2$, parameters of our height model. Using gradient decent, we've found that $\hat{\mu} = 154.60$ and $\hat{\sigma} = 7.73$ which means that $\hat{\mathbf{\theta}} = \\{154.60, 7.73\\}$. What's still unknown to us is the variance of the posterior, $\Sigma$. Let's figure this out now.
 
 ### Approximating the covariance matrix
 
