@@ -81,10 +81,7 @@ Before calculating the marginal distributions, let's take a look at the joint di
 
 !['Histogram of adult height data.'](images/posterior_distribution_72.png)
 
-!['Histogram of adult height data.'](images/posterior_distribution_300.png)
+!['Histogram of adult height data.'](images/posterior_distribution_144.png)
 
+!['Histogram of adult height data.'](images/posterior_distribution_216.png)
 
-!['Histogram of adult height data.'](images/posterior_distribution_400.png)
-
-
-!['Histogram of adult height data.'](images/posterior_distribution_600.png)
