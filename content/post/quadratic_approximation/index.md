@@ -62,29 +62,29 @@ From the data and what we know about the world, a mean height prior of `178` is 
 
 ## Find MAP estimate of parameters
 
-TODO
+TODO: Explain gradient decent. This is full batch gradient decent.
 
 {{% callout note %}}
 The mode of a distribution is its *maximum a posteriori* which translates to *maximum of the posterior*.
 {{% /callout %}}
 
 
-## Quadratic approximation of parameter distributions
+## Quadratic approximation of the posterior
 
-Now that we have found the mode of the posterior distribution, we can use quadratic approximation to estimate the full posterior distribution.
+Now that we have found the mode of the posterior distribution, we can use quadratic approximation to estimate the full posterior distribution. Remember that our posterior distribution is a multivariate Gaussian
 
 $$
 \begin{aligned}
-\bf{\theta} &\sim N(\bf{\hat{\theta}}, \Sigma) \\\\
-&\sim \frac{1}{(2\pi)^{\frac{d}{2}} |\Sigma|^{\frac{1}{2}}}e^{-\frac{1}{2}(\theta - \hat\theta)^\intercal \Sigma^{-1}(\theta - \hat\theta)}
+\mathbf{\theta} &\sim N(\hat{\mathbf{\theta}}, \Sigma) \\\\
+&\sim \frac{1}{(2\pi)^{\frac{d}{2}} |\Sigma|^{\frac{1}{2}}}e^{-\frac{1}{2}(\mathbf{\theta} - \hat{\mathbf{\theta}})^\intercal \Sigma^{-1}(\mathbf{\theta} - \hat{\mathbf{\theta}})}
 \end{aligned}
 $$
 
-Let's go over what we have so far. The posterior of our model is a Gaussian model of height, $h \sim N(\mu, \sigma)$. Using gradient decent, we've found that using values $\mu = 154.60$ and $\sigma = 7.73$ maximizes the probability of the data subject to our priors. This gives us a point estimate of our parameters $\theta = \{\mu, \sigma \}$. Now let's find each parameters marginal distribution.
+and in our case $\mathbf{\theta} \coloneqq \{\mu, \sigma\}$ since these are the two, $d = 2$, parameters of our height model. Using gradient decent, we've found that $\hat{\mu} = 154.60$ and $\hat{\sigma} = 7.73$ which means that $\hat{\mathbf{\theta}} = \{154.60, 7.73\}$. What's still unknown to us is the variance of the posterior, $\Sigma$. Let's figure this out now.
 
-### Parameter distributions
+### Approximating the covariance matrix
 
-Before calculating the marginal distributions, let's take a look at the joint distribution of $\theta$.
+First, let's take a look at the empirical posterior joint distribution of $\mathbf{\theta}$.
 
 !['Histogram of adult height data.'](images/posterior_distribution.png)
 
