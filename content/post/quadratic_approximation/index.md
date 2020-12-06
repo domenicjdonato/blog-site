@@ -42,7 +42,7 @@ The setup is simple, we want to use a Gaussian to describe the distribution of !
 
 The data contains a mix of adults and children. Filtering it to those with an age of at least 18 leaves us with 352 data points. Inspecting the histogram shows that the data is roughly Gaussian.
 
-!['Histogram of adult height data.'](images/data_hist.png)
+!['Histogram of adult height data.'](images/data_histogram.png)
 
 ### Model
 
@@ -58,7 +58,7 @@ $$
 
 From the data and what we know about the world, a mean height prior of `178` is a bit high. However, the flexibility provided by the standard deviation of `20` means that the model can still fit our data. It's also useful for illustrating how data can overcome incorrect priors so long as they are not too strong. We double check that our model is capable of describing the data by plotting samples from it's prior distribution. 
 
-!['Histogram of height data and model prior.'](images/data_prior_hist.png)
+!['Histogram of height data and model prior.'](images/data_and_prior_histogram.png)
 
 ## Find MAP estimate of parameters
 
@@ -79,9 +79,5 @@ Let's go over what we have so far. The posterior of our model is a Gaussian mode
 
 Before calculating the marginal distributions, let's take a look at the joint distribution of $\theta$.
 
-!['Histogram of adult height data.'](images/posterior_distribution_72.png)
-
-!['Histogram of adult height data.'](images/posterior_distribution_144.png)
-
-!['Histogram of adult height data.'](images/posterior_distribution_216.png)
+!['Histogram of adult height data.'](images/posterior_distribution.png)
 
