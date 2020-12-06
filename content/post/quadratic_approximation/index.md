@@ -71,7 +71,14 @@ The mode of a distribution is its *maximum a posteriori* which translates to *ma
 
 ## Quadratic approximation of parameter distributions
 
-Now that we have found the mode of the posterior distribution, we can use quadratic approximation to estimate the marginal distribution of our models parameters. 
+Now that we have found the mode of the posterior distribution, we can use quadratic approximation to estimate the full posterior distribution.
+
+$$
+\begin{aligned}
+\bf{\theta} &\sim N(\bf{\hat{\theta}}, \Sigma) \\\\
+&\sim \frac{1}{(2\pi)^{\frac{d}{2}} |\Sigma|^{\frac{1}{2}}}e^{-\frac{1}{2}(\theta - \hat\theta)^\intercal \Sigma^{-1}(\theta - \hat\theta)}
+\end{aligned}
+$$
 
 Let's go over what we have so far. The posterior of our model is a Gaussian model of height, $h \sim N(\mu, \sigma)$. Using gradient decent, we've found that using values $\mu = 154.60$ and $\sigma = 7.73$ maximizes the probability of the data subject to our priors. This gives us a point estimate of our parameters $\theta = \{\mu, \sigma \}$. Now let's find each parameters marginal distribution.
 
