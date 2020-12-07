@@ -36,7 +36,7 @@ It turns out there is a lot happening behind the scene here and we're going to c
 
 ## Problem setup
 
-The setup is simple, we want to use a Gaussian to describe the distribution of !Kung adult heights. The data provided by Richard is partial census data from where they live, which is near the Kalahari Desert in the southern part of Africa. 
+We want to use a Gaussian to describe the distribution of !Kung adult heights. The data provided by Richard is partial census data from where they live, which is near the Kalahari Desert in the southern part of Africa. 
 
 ### Data
 
@@ -49,6 +49,7 @@ The data contains a mix of adults and children. Filtering it to those with an ag
 The first model that Richard has us use is a Gaussian with priors on both of it's parameters.
 
 $$
+\tag{1}
 \begin{aligned}
 h_i &\sim N(\mu, \sigma) \\\\
 \mu &\sim N(178, 20) \\\\
@@ -56,13 +57,41 @@ h_i &\sim N(\mu, \sigma) \\\\
 \end{aligned}
 $$
 
-From the data and what we know about the world, a mean height prior of `178` is a bit high. However, the flexibility provided by the standard deviation of `20` means that the model can still fit our data. It's also useful for illustrating how data can overcome incorrect priors so long as they are not too strong. We double check that our model is capable of describing the data by plotting samples from it's prior distribution. 
+From the data and what we know about the world, a mean height prior of `178` is a bit high. However, the flexibility provided by the standard deviation of `20` means that the model can still fit our data. It's also useful for illustrating how data can overcome incorrect priors so long as they are not too strong. We double check that our model is capable of describing the data by plotting samples from its prior distribution. 
 
 !['Histogram of height data and model prior.'](images/data_and_prior_histogram.png)
 
+### Posterior
+
+We'd like to find the parameters that maximize the probability of both the data and our priors. We use Bayes' rule to isolate the probability of our parameters, which is called the _posterior_.
+
+$$
+\tag{2}
+\overbrace{P(\theta | \mathcal{D})}^\text{Posterior} = \frac{\overbrace{P(\mathcal{D} | \theta)}^\text{Likelihood} \cdot \overbrace{P(\theta)}^\text{Prior}}{\underbrace{P(\mathcal{D})}_\text{Space being considered}}
+$$
+
+TODO: Expand equation (2) to our concrete example/model.
+
+#### Aside
+
+One thing to note is that $P(\mathcal{D})$ is a _normalizing constant_. It is not something we can usually know and is used to ensure that the sum of all our probabilities in the space being considered sum to `1`. Sometimes this is referred to as the probability of the data, but it's important to remember that $P(\mathcal{D})$ is really the probability of the data given our choice of model and the priors we placed on the model's parameters. A more explicit way of writing formula (2) is
+
+$$
+\tag{3}
+P(\theta | \mathcal{D}, \mathcal{M}) = \frac{P(\mathcal{D} | \theta, \mathcal{M}) \cdot P(\theta | \mathcal{M}) \cdot P(\mathcal{M})}{P(\mathcal{D},\mathcal{M})}
+$$
+
+where $\mathcal{M}$ stands for our modelling assumptions. This formulation aids in reminding us that our conclusions and confidences are conditioned on the probability that we made correct modeling assumptions. I think it's safe to say that in most cases $P(\mathcal{M}) \neq 1$. 
+
+
 ## Find MAP estimate of parameters
 
+Now that we know we're trying to optimize the posterior, let's learn a way to do this. There are a few optimization techniques that can be used for this type of problem and I'm going to use the one that's most familiar to me. I come from a deep learning background and we use gradient decent often so this is how I'm going to find the maximum of our posterior distribution. Before we get into this though, we're going to make the function we optimizer easier to deal with.
+
+TODO: Explain the Log transformation.
+
 TODO: Explain gradient decent. This is full batch gradient decent.
+
 
 {{% callout note %}}
 The mode of a distribution is its *maximum a posteriori* which translates to *maximum of the posterior*.
@@ -84,7 +113,7 @@ and in our case $\mathbf{\theta} := \\{\mu, \sigma\\}$ since these are the two, 
 
 ### Approximating the covariance matrix
 
-First, let's take a look at the empirical posterior joint distribution of $\mathbf{\theta}$.
+First, let's take a look at the empirical posterior joint distribution. This was 
 
 !['Histogram of adult height data.'](images/posterior_distribution.png)
 
