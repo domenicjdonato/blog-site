@@ -24,7 +24,7 @@ Topics covered:
 
 {{% toc %}}
 
-## Preamble - modeling thought process
+## Preamble
 
 When it comes to modeling, it is easy to get so involved in the process of optimizing that sometimes the bigger picture is lost. For this reason, let's go through the modeling thought process step by step. 
 
@@ -66,7 +66,9 @@ The data provided by Richard is partial census data from where the !Kung people 
 
 !['Histogram of adult height data.'](images/data_histogram.png)
 
-**Modeling decision:** $\mathcal{D} = d$ here we've decided to use the data provided to us.
+#### Modeling decision
+
+$\mathcal{D} = d$ here we've decided to use the data provided to us.
 
 ### Model
 
@@ -75,7 +77,7 @@ The first model that Richard has us use is a Gaussian with priors on both of it'
 $$
 \tag{2}
 \begin{aligned}
-h_i &\sim \mathcal{M}(\theta) = N(\mu, \sigma) \\\\
+h_i &\sim N(\mu, \sigma) \\\\
 \mu &\sim N(178, 20) \\\\
 \sigma &\sim U(0, 50)
 \end{aligned}
@@ -84,6 +86,10 @@ $$
 From the data and what we know about the world, a mean height prior of `178` is a bit high. However, the flexibility provided by the standard deviation of `20` means that the model can still fit our data. It's also useful for illustrating how data can overcome incorrect priors so long as they are not too strong. We double check that our model is capable of describing the data by plotting samples from its prior distribution. 
 
 !['Histogram of height data and model prior.'](images/data_and_prior_histogram.png)
+
+#### Modeling decision
+
+$\mathcal{M} = N(\mu, \sigma)$ and $\Theta = \{\mu, \sigma\}$ here we've decided to use a Gaussian model and to impose priors on it's parameters.
 
 ## Posterior
 
@@ -106,9 +112,7 @@ $$
 where $\mathcal{M}$ stands for our modelling assumptions. This formulation helps to remind us that our conclusions and confidences are conditioned on the probability that we made correct modeling assumptions. It's safe to say that in most cases $P(\mathcal{M}) < 1$. 
 
 
-## Find MAP estimate of parameters
-
-
+## MAP Estimation
 
 Since $P(\mathcal{D})$ is fixed by the time we get this far, more on this later, we can drop it from the function  start optimizing
 TODO: Expand equation (2) to our concrete example/model.
@@ -125,7 +129,7 @@ The mode of a distribution is its *maximum a posteriori* which translates to *ma
 {{% /callout %}}
 
 
-## Quadratic approximation of the posterior
+## Quadratic approximation
 
 Now that we have found the mode of the posterior distribution, we can use quadratic approximation to estimate the full posterior distribution. Remember that our posterior distribution is a multivariate Gaussian
 
@@ -138,7 +142,7 @@ $$
 
 and in our case $\mathbf{\theta} := \\{\mu, \sigma\\}$ since these are the two, $d = 2$, parameters of our height model. Using gradient decent, we've found that $\hat{\mu} = 154.60$ and $\hat{\sigma} = 7.73$ which means that $\hat{\mathbf{\theta}} = \\{154.60, 7.73\\}$. What's still unknown to us is the variance of the posterior, $\Sigma$. Let's figure this out now.
 
-### Approximating the covariance matrix
+### Covariance matrix
 
 First, let's take a look at the empirical posterior joint distribution. This was 
 
