@@ -66,10 +66,9 @@ The data provided by Richard is partial census data from where the !Kung people 
 
 !['Histogram of adult height data.'](images/data_histogram.png)
 
-{{< h1 >}}Modeling decision{{< /h1 >}}: $\mathcal{D} = d$ here we've decided to use the data provided to us.
+**Modeling decision:** $\mathcal{D} = d$ here we've decided to use the data provided to us.
 
-
-### Our modeling decisions
+### Model
 
 The first model that Richard has us use is a Gaussian with priors on both of it's parameters.
 
@@ -86,7 +85,9 @@ From the data and what we know about the world, a mean height prior of `178` is 
 
 !['Histogram of height data and model prior.'](images/data_and_prior_histogram.png)
 
-### Posterior
+## Posterior
+
+TODO: Derive the posterior from the joint distribution in eq (1).
 
 Just as our data has a distribution, so do the parameters of our model. There are infinitely many values our parameters could take on but only a small subset of these make sense given our data and priors. This distribution of parameters is called the _posterior_.     We'd like to find the parameters that maximize the probability of both the data and our priors. We use Bayes' rule to isolate the probability of our parameters, which is called the _posterior_.
 
