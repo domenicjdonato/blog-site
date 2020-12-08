@@ -24,34 +24,59 @@ Topics covered:
 
 {{% toc %}}
 
-## Preamble
+## Preamble - modeling thought process
 
-Richard McElreath does a great job of explaining the topics of Probabilistic Modeling and Bayesian Inference. This post is based on the problem he uses in Chapter 4 of Statistical Rethinking. In particular, this post is about what happens when a single line of code is called 
+When it comes to modeling, it is easy to get so involved in the process of optimizing that sometimes the bigger picture is lost. For this reason, let's go through the modeling thought process step by step. 
+
+* There is some phenomena $p \in \mathcal{P}$ 
+* Our goal $g \in \mathcal{G}$ is to understand, predict, or describe $p$
+* To accomplish our goal empirically, we need
+  * data $d \in \mathcal{D}$
+  * a model $m \in \mathcal{M}$
+  * parameters $\theta \in \Theta$, please note that when $m$ is non-parametric $\theta = d$
+
+We'd like to select each of these components to maximize the probability of us achieving our goal. To put it formally we are looking for
+
+$$
+\underset{d, m, \theta}{arg\max}\ P(\mathcal{D} = d, \mathcal{M} = m, \Theta = \theta | p, g)
+$$
+
+Although it's true that $p$ may not exist and $g$ may be the wrong goal, at some point we make the decision to proceed with our modeling process. To make the notation less cluttered we implicitly condition on these two elements. This means we are left with the joint distribution
+
+$$
+\tag{1}
+P(\mathcal{D}, \mathcal{M}, \Theta)
+$$
+
+which will be important to remember as we proceed.
+
+## Problem setup
+
+Richard McElreath does a great job of explaining the topics of Probabilistic Modeling and Bayesian Inference. The problem we are going to cover is in Chapter 4 of Statistical Rethinking, which is to describe the distribution of !Kung adult heights. In particular, we're going to manually do what is accomplished from this line of code in the text
 
 ```python
 result = maximum_a_posteriori(model, data=df)
 ``` 
 
-It turns out there is a lot happening behind the scene here and we're going to cover it.
-
-## Problem setup
-
-We want to use a Gaussian to describe the distribution of !Kung adult heights. The data provided by Richard is partial census data from where they live, which is near the Kalahari Desert in the southern part of Africa. 
+It turns out there is a lot happening behind the scene here.
 
 ### Data
 
-The data contains a mix of adults and children. Filtering it to those with an age of at least 18 leaves us with 352 data points. Inspecting the histogram shows that the data is roughly Gaussian.
+The data provided by Richard is partial census data from where the !Kung people live, which is near the Kalahari Desert in the southern part of Africa. The data contains a mix of adults and children. Filtering it to those with an age of at least 18 leaves us with 352 data points. Inspecting the histogram shows that the data is roughly Gaussian.
 
 !['Histogram of adult height data.'](images/data_histogram.png)
 
-### Model
+{{< h1 >}}Modeling decision{{< /h1 >}}: $\mathcal{D} = d$ here we've decided to use the data provided to us.
+
+
+### Our modeling decisions
 
 The first model that Richard has us use is a Gaussian with priors on both of it's parameters.
 
 $$
-\tag{1}
+\tag{2}
 \begin{aligned}
-h_i &\sim N(\mu, \sigma) \\\\
+h_i &\sim \mathcal{M}(\theta) = N(\mu, \sigma) \\\\
 \mu &\sim N(178, 20) \\\\
 \sigma &\sim U(0, 50)
 \end{aligned}
@@ -63,16 +88,12 @@ From the data and what we know about the world, a mean height prior of `178` is 
 
 ### Posterior
 
-We'd like to find the parameters that maximize the probability of both the data and our priors. We use Bayes' rule to isolate the probability of our parameters, which is called the _posterior_.
+Just as our data has a distribution, so do the parameters of our model. There are infinitely many values our parameters could take on but only a small subset of these make sense given our data and priors. This distribution of parameters is called the _posterior_.     We'd like to find the parameters that maximize the probability of both the data and our priors. We use Bayes' rule to isolate the probability of our parameters, which is called the _posterior_.
 
 $$
 \tag{2}
 \overbrace{P(\theta | \mathcal{D})}^\text{Posterior} = \frac{\overbrace{P(\mathcal{D} | \theta)}^\text{Likelihood} \cdot \overbrace{P(\theta)}^\text{Prior}}{\underbrace{P(\mathcal{D})}_\text{Space being considered}}
 $$
-
-TODO: Expand equation (2) to our concrete example/model.
-
-#### Aside
 
 One thing to note is that $P(\mathcal{D})$ is a _normalizing constant_. It is not something we can usually know and is used to ensure that the sum of all our probabilities in the space being considered sum to `1`. Sometimes this is referred to as the probability of the data, but it's important to remember that $P(\mathcal{D})$ is really the probability of the data given our choice of model and the priors we placed on the model's parameters. A more explicit way of writing formula (2) is
 
@@ -81,10 +102,15 @@ $$
 P(\theta | \mathcal{D}, \mathcal{M}) = \frac{P(\mathcal{D} | \theta, \mathcal{M}) \cdot P(\theta | \mathcal{M}) \cdot P(\mathcal{M})}{P(\mathcal{D},\mathcal{M})}
 $$
 
-where $\mathcal{M}$ stands for our modelling assumptions. This formulation aids in reminding us that our conclusions and confidences are conditioned on the probability that we made correct modeling assumptions. I think it's safe to say that in most cases $P(\mathcal{M}) \neq 1$. 
+where $\mathcal{M}$ stands for our modelling assumptions. This formulation helps to remind us that our conclusions and confidences are conditioned on the probability that we made correct modeling assumptions. It's safe to say that in most cases $P(\mathcal{M}) < 1$. 
 
 
 ## Find MAP estimate of parameters
+
+
+
+Since $P(\mathcal{D})$ is fixed by the time we get this far, more on this later, we can drop it from the function  start optimizing
+TODO: Expand equation (2) to our concrete example/model.
 
 Now that we know we're trying to optimize the posterior, let's learn a way to do this. There are a few optimization techniques that can be used for this type of problem and I'm going to use the one that's most familiar to me. I come from a deep learning background and we use gradient decent often so this is how I'm going to find the maximum of our posterior distribution. Before we get into this though, we're going to make the function we optimizer easier to deal with.
 
