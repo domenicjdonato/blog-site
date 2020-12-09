@@ -8,32 +8,39 @@ date: 2020-12-04
 
 ---
 
-I'm calling this a "deep dive" because we're going to go through many steps as we solve this problem. Many of these steps are intermediary and usually glossed over or stated as fact in other explanations of this topic. This post is most suited to those who are doing interview preparation or who want a detailed understand of the topic.
+This is an in depth post about Bayesian probabilistic modeling. I'm using a model because it enables us to go through every step in detail. Many mathematical techniques are used to solve this problem. Since this is a deep dive, I'll be reviewing these topics as well. This post is aimed at those who want a detailed understand of the topic or who are preparing for interviews.
 
-Topics covered:
-* Multivariate Gaussian Distribution $N(\mu, \Sigma)$
-* Gradient Decent to find the *maximum a posteriori* (MAP)
-* Quadratic Approximation (aka Laplace Approximation)
+<!-- Topics covered:
+* Multivariate Gaussian
+* MAP - *maximum a posteriori* 
+* Gradient Decent
 * Taylor Expansion
-* Covariance Matrix $\Sigma$ and it's inverse $\Sigma^{-1}$
-* The Hessian $\mathcal{H}$ and it's relationship to $\Sigma^{-1}$
-* Empirical (tabular) estimation of second partial derivatives
-* Errors associated with the Gaussian assumption
+* Inverse of Covariance Matrix
+* Hessian of Multivariate Gaussian
+* Empirical second partial derivatives
+* Quadratic Approximation
+* Goodness of fit testing -->
+
+I've also prepared a self-contained IPython notebook that reproduces the results of this post.
 
 [Companion Colab Notebook](https://colab.research.google.com/drive/1REwGPMOk_elQcalsqhKzqQ3WYizB_T37?usp=sharing)
 
 {{% toc %}}
 
-## Preamble
+## Probabilistic modeling
 
-When it comes to modeling, it is easy to get so involved in the process of optimizing that sometimes the bigger picture is lost. For this reason, let's go through the modeling thought process step by step. 
+Briefly, let's go through the modeling thought process. I find Jaynes' formulation of probability theory particularly useful. He extends mathematical logic (Boolean algebra) to the continuous space. So rather than propositions being true `1` or false `0`, they have a degree of _plausibility_ `[0, 1]`. This formulation is naturally Bayesian because it is based on uncertainty rather than random chance. One of the benefits of viewing probability from this lense is that it enables the following empirical modeling thought process.
 
-* There is some phenomena $p \in \mathcal{P}$ 
-* Our goal $g \in \mathcal{G}$ is to understand, predict, or describe $p$
-* To accomplish our goal empirically, we need
-  * data $d \in \mathcal{D}$
-  * a model $m \in \mathcal{M}$
-  * parameters $\theta \in \Theta$, please note that when $m$ is non-parametric $\theta = d$
+### Steps
+
+1. There is some phenomena $p \in \mathcal{P}$ 
+1. Our goal $g \in \mathcal{G}$ is to understand, predict, or describe $p$
+1. We can obtain data $d \in \mathcal{D}$ that represents our phenomena and goal
+1. We produce a model $m \in \mathcal{M}$ that can adequately handle the data
+1. We find model parameters $\theta \in \Theta$ that best accomplishes our goal
+   * when $m$ is non-parametric the data are the parameters $d = \theta$
+
+TODO: These decisions happen in this order. Each of these decisions restricts the search space. Each decision has a probability of being non-optimal or even wrong. I'd like to show both the space reduction (probably set notation) and the cumulative uncertainty effect of decisions 1 - 4 on the results we get from 5. Basically, what is the impact of $P(\mathcal{M}) < 1$? 
 
 We'd like to select each of these components to maximize the probability of us achieving our goal. To put it formally we are looking for
 
@@ -66,9 +73,7 @@ The data provided by Richard is partial census data from where the !Kung people 
 
 !['Histogram of adult height data.'](images/data_histogram.png)
 
-#### Modeling decision
-
-$\mathcal{D} = d$ here we've decided to use the data provided to us.
+**Modeling decision:** $\mathcal{D} = d$ here we've decided to use the data provided to us.
 
 ### Model
 
@@ -87,34 +92,61 @@ From the data and what we know about the world, a mean height prior of `178` is 
 
 !['Histogram of height data and model prior.'](images/data_and_prior_histogram.png)
 
-#### Modeling decision
-
-$\mathcal{M} = N(\mu, \sigma)$ and $\Theta = \{\mu, \sigma\}$ here we've decided to use a Gaussian model and to impose priors on it's parameters.
+**Modeling decision:** $\mathcal{M} = N(\mu, \sigma)$ and $\Theta = \{\mu, \sigma\}$ here we've decided to use a Gaussian model and to impose priors on it's parameters.
 
 ## Posterior
 
-TODO: Derive the posterior from the joint distribution in eq (1).
-
-Just as our data has a distribution, so do the parameters of our model. There are infinitely many values our parameters could take on but only a small subset of these make sense given our data and priors. This distribution of parameters is called the _posterior_.     We'd like to find the parameters that maximize the probability of both the data and our priors. We use Bayes' rule to isolate the probability of our parameters, which is called the _posterior_.
-
-$$
-\tag{2}
-\overbrace{P(\theta | \mathcal{D})}^\text{Posterior} = \frac{\overbrace{P(\mathcal{D} | \theta)}^\text{Likelihood} \cdot \overbrace{P(\theta)}^\text{Prior}}{\underbrace{P(\mathcal{D})}_\text{Space being considered}}
-$$
-
-One thing to note is that $P(\mathcal{D})$ is a _normalizing constant_. It is not something we can usually know and is used to ensure that the sum of all our probabilities in the space being considered sum to `1`. Sometimes this is referred to as the probability of the data, but it's important to remember that $P(\mathcal{D})$ is really the probability of the data given our choice of model and the priors we placed on the model's parameters. A more explicit way of writing formula (2) is
+At this point, for better or worse, we've decided on [steps](#Steps) 1 - 4. Meaning we've made decisions on the data, model, and set of parameters we are going to consider when describing the height of the !Kung people. This reduces the space of our joint distribution in equation (1) to
 
 $$
 \tag{3}
-P(\theta | \mathcal{D}, \mathcal{M}) = \frac{P(\mathcal{D} | \theta, \mathcal{M}) \cdot P(\theta | \mathcal{M}) \cdot P(\mathcal{M})}{P(\mathcal{D},\mathcal{M})}
+P(d, m, \theta)
 $$
 
-where $\mathcal{M}$ stands for our modelling assumptions. This formulation helps to remind us that our conclusions and confidences are conditioned on the probability that we made correct modeling assumptions. It's safe to say that in most cases $P(\mathcal{M}) < 1$. 
+Step 5, the final step, is to select the parameters we use with our model. To do this, we need to isolate $\theta$ in equation (3). Using the [rules of probability](https://en.wikipedia.org/wiki/Joint_probability_distribution#Joint_density_function_or_mass_function), we can rewrite a joint distribution in terms of conditional distributions. The following are all equivalent
 
+$$
+\tag{4}
+\begin{aligned}
+P(d, m, \theta) &= P(m | d, \theta) \cdot P(d, \theta)\\\\
+                &= P(d | \theta, m) \cdot P(\theta, m) \\\\
+                &= P(\theta | d, m) \cdot P(d, m)
+\end{aligned}
+$$
+
+and we're going to use the first one so we can get rid of $m$ while we work to isolate $\theta$.
+
+$$
+\tag{5}
+\begin{aligned}
+&P(m | d, \theta) \cdot P(d, \theta) = P(m | d, \theta) \cdot P(d, \theta) \\\\
+
+&P(m | d, \theta) \cdot P(\theta | d) \cdot P(d) = P(m | d, \theta) \cdot P(d | \theta) \cdot P(\theta) \\\\
+
+&\sout{P(m | d, \theta)} \cdot P(\theta | d) \cdot P(d) = \sout{P(m | d, \theta)} \cdot P(d | \theta) \cdot P(\theta)\\\\
+
+&P(\theta | d) \cdot P(d) = P(d | \theta) \cdot P(\theta)
+\end{aligned}
+$$
+
+Dividing both sides by $P(d)$ will isolate $\theta$ and provide us with the formula we associate with "Bayes' rule".
+
+$$
+\tag{6}
+\overbrace{P(\theta | d)}^\text{Posterior} = \frac{\overbrace{P(d | \theta)}^\text{Likelihood} \cdot \overbrace{P(\theta)}^\text{Prior}}{\underbrace{P(d)}_\text{Space being considered}}
+$$
+
+We've just derived the posterior distribution. Just as our data has a distribution, so do the parameters of our model. There are many values our parameters could take on but only a small subset of these make sense given our data and priors. Next, We'll look at finding this subset.
 
 ## MAP Estimation
 
-Since $P(\mathcal{D})$ is fixed by the time we get this far, more on this later, we can drop it from the function  start optimizing
+Remember that $P(d) := P(\mathcal{D} = d)$. Now that we've decided on what data to use, this probability is fixed and independent of the parameters $\theta$ we choose. It's for this reason you will sometimes hear $P(d)$ referred to as a _normalizing constant_. Since the maximum of a function does not change when every value is multiplied by a constant value, we can disregard this quantity and arrive at the same conclusion.
+
+$$
+\tag{7}
+P(\theta | d) = P(d | \theta) \cdot P(\theta)
+$$
+
 TODO: Expand equation (2) to our concrete example/model.
 
 Now that we know we're trying to optimize the posterior, let's learn a way to do this. There are a few optimization techniques that can be used for this type of problem and I'm going to use the one that's most familiar to me. I come from a deep learning background and we use gradient decent often so this is how I'm going to find the maximum of our posterior distribution. Before we get into this though, we're going to make the function we optimizer easier to deal with.
