@@ -121,7 +121,7 @@ $$
 \begin{aligned}
 &P(m | d, \theta) \cdot P(d, \theta) = P(m | d, \theta) \cdot P(d, \theta) \\\\
 &P(m | d, \theta) \cdot P(\theta | d) \cdot P(d) = P(m | d, \theta) \cdot P(d | \theta) \cdot P(\theta) \\\\
-&\sout{P(m | d, \theta)} \cdot P(\theta | d) \cdot P(d) = \sout{P(m | d, \theta)} \cdot P(d | \theta) \cdot P(\theta)\\\\
+&\cancel{P(m | d, \theta)} \cdot P(\theta | d) \cdot P(d) = \cancel{P(m | d, \theta)} \cdot P(d | \theta) \cdot P(\theta)\\\\
 &P(\theta | d) \cdot P(d) = P(d | \theta) \cdot P(\theta)
 \end{aligned}
 $$
