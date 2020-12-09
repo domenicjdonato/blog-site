@@ -120,11 +120,8 @@ $$
 \tag{5}
 \begin{aligned}
 &P(m | d, \theta) \cdot P(d, \theta) = P(m | d, \theta) \cdot P(d, \theta) \\\\
-
 &P(m | d, \theta) \cdot P(\theta | d) \cdot P(d) = P(m | d, \theta) \cdot P(d | \theta) \cdot P(\theta) \\\\
-
 &\sout{P(m | d, \theta)} \cdot P(\theta | d) \cdot P(d) = \sout{P(m | d, \theta)} \cdot P(d | \theta) \cdot P(\theta)\\\\
-
 &P(\theta | d) \cdot P(d) = P(d | \theta) \cdot P(\theta)
 \end{aligned}
 $$
@@ -147,7 +144,19 @@ $$
 P(\theta | d) = P(d | \theta) \cdot P(\theta)
 $$
 
-TODO: Expand equation (2) to our concrete example/model.
+Plugging our modelling assumptions into equation (7) gives us
+
+$$
+\tag{8}
+\begin{aligned}
+P(\mu, \sigma | d) &= P(d | \mu, \sigma) \cdot P(\mu | \sigma) \cdot P(\sigma) \\\\
+                   &= P(d | \mu, \sigma) \cdot P(\mu) \cdot P(\sigma)
+\end{aligned}
+$$
+
+The reason that $P(\mu | \sigma) = P(\mu)$ is purely due to the parameter independence assumption we made when defining our [model](#model). We'll see later on that this was an incorrect assumption. Our full un-normalized probability function is
+
+TODO: Expand equation (8) to our concrete model.
 
 Now that we know we're trying to optimize the posterior, let's learn a way to do this. There are a few optimization techniques that can be used for this type of problem and I'm going to use the one that's most familiar to me. I come from a deep learning background and we use gradient decent often so this is how I'm going to find the maximum of our posterior distribution. Before we get into this though, we're going to make the function we optimizer easier to deal with.
 
