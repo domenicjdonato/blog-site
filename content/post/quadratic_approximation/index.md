@@ -119,10 +119,10 @@ and we're going to use the first one so we can get rid of $m$ while we work to i
 $$
 \tag{5}
 \begin{aligned}
-&P(m | d, \theta) \cdot P(d, \theta) = P(m | d, \theta) \cdot P(d, \theta) \\\\
-&P(m | d, \theta) \cdot P(\theta | d) \cdot P(d) = P(m | d, \theta) \cdot P(d | \theta) \cdot P(\theta) \\\\
-&\cancel{P(m | d, \theta)} \cdot P(\theta | d) \cdot P(d) = \cancel{P(m | d, \theta)} \cdot P(d | \theta) \cdot P(\theta) \\\\
-&P(\theta | d) \cdot P(d) = P(d | \theta) \cdot P(\theta)
+& P(m | d, \theta) \cdot P(d, \theta) = P(m | d, \theta) \cdot P(d, \theta) \\\\
+& P(m | d, \theta) \cdot P(\theta | d) \cdot P(d) = P(m | d, \theta) \cdot P(d | \theta) \cdot P(\theta) \\\\
+& \cancel{P(m | d, \theta)} \cdot P(\theta | d) \cdot P(d) = \cancel{P(m | d, \theta)} \cdot P(d | \theta) \cdot P(\theta) \\\\
+& P(\theta | d) \cdot P(d) = P(d | \theta) \cdot P(\theta)
 \end{aligned}
 $$
 
