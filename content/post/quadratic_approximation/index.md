@@ -121,7 +121,7 @@ $$
 \begin{aligned}
 &P(m | d, \theta) \cdot P(d, \theta) = P(m | d, \theta) \cdot P(d, \theta) \\\\
 &P(m | d, \theta) \cdot P(\theta | d) \cdot P(d) = P(m | d, \theta) \cdot P(d | \theta) \cdot P(\theta) \\\\
-&\cancel{P(m | d, \theta)} \cdot P(\theta | d) \cdot P(d) = \cancel{P(m | d, \theta)} \cdot P(d | \theta) \cdot P(\theta)\\\\
+&\cancel{P(m | d, \theta)} \cdot P(\theta | d) \cdot P(d) = \cancel{P(m | d, \theta)} \cdot P(d | \theta) \cdot P(\theta) \\\\
 &P(\theta | d) \cdot P(d) = P(d | \theta) \cdot P(\theta)
 \end{aligned}
 $$
@@ -137,38 +137,48 @@ We've just derived the posterior distribution. Just as our data has a distributi
 
 ## MAP Estimation
 
-Remember that $P(d) := P(\mathcal{D} = d)$. Now that we've decided on what data to use, this probability is fixed and independent of the parameters $\theta$ we choose. It's for this reason you will sometimes hear $P(d)$ referred to as a _normalizing constant_. Since the maximum of a function does not change when every value is multiplied by a constant value, we can disregard this quantity and arrive at the same conclusion.
+We're going to find the $\mu$ and $\sigma$ that maximizes the probability of our posterior. This will end up being the mode of our parameter distribution. We're going to do this numerically using a process called gradient decent.
+
+### Loss function
+
+In order to use gradient decent, we need a function to minimize. This is usually called the loss or cost function. We are going to modify equation (6) into something that is easy to optimize.
+
+The first thing to do is to remove $P(d)$. Remember that $P(d) := P(\mathcal{D} = d)$. We've decided on what data to use and this decision is independent of our parameters. This probability is still important because if we chose bad data, then everything we estimate is garbage. However, that is a separate issue from what $\theta$ we should choose. Since $P(d)$ is a fixed value during the data fitting phase of modeling, you will sometimes hear it referred to as a _normalizing constant_. Dropping this term does not change the location of the maximum so let's go ahead and do this.
 
 $$
 \tag{7}
 P(\theta | d) = P(d | \theta) \cdot P(\theta)
 $$
 
-Plugging our modelling assumptions into equation (7) gives us
+Let's make this equation look more like our [model](#model) by plugging in some of our assumptions. One assumption we made that was probably not immediately obvious is that $\mu$ and $\sigma$ are independent. Meaning that $P(\mu | \sigma) = P(\mu)$.  We'll have to wait and see if this was a correct assumption.
 
 $$
 \tag{8}
 \begin{aligned}
 P(\mu, \sigma | d) &= P(d | \mu, \sigma) \cdot P(\mu | \sigma) \cdot P(\sigma) \\\\
-                   &= P(d | \mu, \sigma) \cdot P(\mu) \cdot P(\sigma)
+                   &= P(d | \mu, \sigma) \cdot P(\mu) \cdot P(\sigma) \\\\
+                 &= \prod_i N(h_i | \mu, \sigma) \cdot N(\mu | 178, 20) \cdot U(\sigma | 0, 50)
 \end{aligned}
 $$
 
-The reason that $P(\mu | \sigma) = P(\mu)$ is purely due to the parameter independence assumption we made when defining our [model](#model). We'll see later on that this was an incorrect assumption. Our full un-normalized probability function is
+The final transformation we need to apply is taking the natural logarithm of both sides. This done for a couple of reasons. First, it simplifies the mathematics by converting products to sums. Second, it helps to prevent numerical [underflows](https://en.wikipedia.org/wiki/Arithmetic_underflow) due to multiplying many small probabilities together. It's safe to do this because we are only looking for the maximum of the function and the logarithm is a smooth monotonically increasing function. Due to this, the maximum of the function is also the maximum of the log of the function. Take a look at the plots below to see some example of this.
 
-TODO: Expand equation (8) to our concrete model.
+!['Examples of log transforms.'](images/log_transform.png)
 
-Now that we know we're trying to optimize the posterior, let's learn a way to do this. There are a few optimization techniques that can be used for this type of problem and I'm going to use the one that's most familiar to me. I come from a deep learning background and we use gradient decent often so this is how I'm going to find the maximum of our posterior distribution. Before we get into this though, we're going to make the function we optimizer easier to deal with.
+After taking the logarithm of both sides of equation (8), we end up with
 
-TODO: Explain the Log transformation.
+$$
+\tag{9}
+Ln\ P(\mu, \sigma | d) = \sum_i Ln\ N(h_i | \mu, \sigma) + Ln\ N(\mu | 178, 20) + Ln\ U(\sigma | 0, 50)
+$$
+
+which is the function we are going to maximize.
+
+### Gradient decent
+
+There are a few optimization techniques that can be used for this type of problem. We're going to use gradient decent because it's a general optimization technique with applications to deep learning. In another post, I'll go over MCMC which is better suited for this type of problem.
 
 TODO: Explain gradient decent. This is full batch gradient decent.
-
-
-{{% callout note %}}
-The mode of a distribution is its *maximum a posteriori* which translates to *maximum of the posterior*.
-{{% /callout %}}
-
 
 ## Quadratic approximation
 
